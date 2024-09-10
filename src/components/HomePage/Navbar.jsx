@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   const navbarRef = useRef(null);
@@ -9,21 +10,21 @@ function Navbar() {
       ref={navbarRef}
     >
       <div className="container">
-        <a href="#" className="logo">
+        <Link to="#" className="logo">
           Your Logo
-        </a>
+        </Link>
         <ul className="nav-links">
           <li>
-            <a href="#">Home</a>
+            <Link to="/questions">Home</Link>
           </li>
           <li>
-            <a href="#">About</a>
+            <Link to="#">About</Link>
           </li>
           <li>
-            <a href="#">Services</a>
+            <Link to="#">Services</Link>
           </li>
           <li>
-            <a href="#">Contact</a>
+            <Link to="#">Contact</Link>
           </li>
         </ul>
         <button className="hamburger" onClick={() => navbarRef.current.classList.toggle("active")}>

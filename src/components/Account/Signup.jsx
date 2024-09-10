@@ -14,6 +14,12 @@ const Signup = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (cookies.logged_in) {
+      return window.location.href = "/"
+    }
+  }, [])
+
   const generateText = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
