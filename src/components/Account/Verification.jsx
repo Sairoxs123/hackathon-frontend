@@ -38,7 +38,7 @@ const Verification = () => {
   ];
 
   if (verification == cookies.verification) {
-    axios.post("https://saiteja.pythonanywhere.com/account/signup/verify/", {
+    axios.post("https://hackathon-frontend-rosy-ten.vercel.app/account/signup/verify/", {
       "email": cookies.email,
       "name": cookies.name,
       "password": cookies.password,
@@ -47,9 +47,9 @@ const Verification = () => {
     }).then(
       res => {
         if (res.data.message == "invalid") {
-          setMessage("Verification Failed. Please try again later.");
+          <div>Verification Failed. Please try again later.</div>;
         } else if (res.data.message == "exists") {
-          setMessage("Account already exists. Please try again later.")
+          return <div>Account already exists. Please try again later.</div>;
         }
         removeCookie("verification")
         setCookie("logged_in", true)
@@ -57,7 +57,7 @@ const Verification = () => {
       }
     )
   } else {
-    setMessage("Invalid token")
+    return <div>Error while verifying</div>;
   }
   return <div>{message}</div>;
 };
