@@ -37,7 +37,7 @@ const Verification = () => {
   ];
 
   if (verification == cookies.verification) {
-    axios.post("http://127.0.0.1:8000/account/signup/verify/", {
+    axios.post("https://hackathon-frontend-rosy-ten.vercel.app/account/signup/verify/", {
       "email": cookies.email,
       "name": cookies.name,
       "password": cookies.password,
