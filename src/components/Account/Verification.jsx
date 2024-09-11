@@ -37,6 +37,10 @@ const Verification = () => {
     "$2b$12$5WAgSoBKmL.gD6MJKEZ1oe1CEwh3GJ0A7aGEKqYHoumYmvYcyD7fe",
   ];
 
+  console.log(verification)
+  console.log(cookies.verification)
+  console.log(verification == cookies.verification)
+
   if (verification == cookies.verification) {
     axios.post("https://hackathon-frontend-rosy-ten.vercel.app/account/signup/verify/", {
       "email": cookies.email,
@@ -59,7 +63,7 @@ const Verification = () => {
   } else {
     return <div>Error while verifying</div>;
   }
-  return <div>{message}</div>;
+  return <div>Verification done.</div>;
 };
 
 export default Verification;
