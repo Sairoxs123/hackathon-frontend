@@ -57,7 +57,7 @@ const Verification = () => {
         }
         removeCookie("verification")
         setCookie("logged_in", true)
-        return redirect("/")
+        window.location.href = "/"
       }
     )
   } else {
