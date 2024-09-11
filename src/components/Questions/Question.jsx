@@ -212,13 +212,13 @@ const Question = () => {
         }
       } else {
         Object.keys(executed).map((key, index) => {
-          console.log(executed[key])
-          console.log(outputs[index])
+          console.log(executed[key]);
+          console.log(outputs[index]);
           setResults((existing) => [
             ...existing,
             areEqual(executed[key], outputs[index]),
           ]);
-        })
+        });
       }
       //console.log(submission)
       if (submission) {
@@ -294,23 +294,25 @@ const Question = () => {
                 ? inputs.map((input, index) => {
                     return (
                       <tr key={index}>
-                        {typeof input == "string" && input.include("\n") ? (
-                          <td
-                            dangerouslySetInnerHTML={{
-                              __html: outputs[index]
-                                .replace(/\n/g, "<br>")
-                                .replace(/"/g, ""),
-                            }}
-                          />
+                        {typeof input === "string" ? (
+                          input.includes("\n") ? (
+                            <td
+                              dangerouslySetInnerHTML={{
+                                __html: outputs[index]
+                                  .replace(/\n/g, "<br>")
+                                  .replace(/"/g, ""),
+                              }}
+                            />
+                          ) : (
+                            input
+                          )
                         ) : (
                           <td>{JSON.stringify(input)}</td>
                         )}
 
-                        {typeof outputs[index] == "string" &&
-                        outputs[index].include("\n") ? (
+                        {typeof outputs[index] == "string" ? (
                           <td>
-                            {typeof outputs[index] == "string" &&
-                            outputs[index].includes("\\n") ? (
+                            {typeof outputs[index].includes("\\n") ? (
                               <td
                                 dangerouslySetInnerHTML={{
                                   __html: outputs[index]
@@ -331,14 +333,16 @@ const Question = () => {
                 : outputs.map((output, index) => {
                     return (
                       <tr key={index}>
-                        {typeof output == "string" && output.includes("\n") ? (
-                          <td
-                            dangerouslySetInnerHTML={{
-                              __html: output
-                                .replace(/\n/g, "<br>")
-                                .replace(/"/g, ""),
-                            }}
-                          />
+                        {typeof output == "string" ? (
+                          output.includes("\n") ? (
+                            <td
+                              dangerouslySetInnerHTML={{
+                                __html: output
+                                  .replace(/\n/g, "<br>")
+                                  .replace(/"/g, ""),
+                              }}
+                            />
+                          ) : output
                         ) : (
                           <td>{JSON.stringify(output)}</td>
                         )}
