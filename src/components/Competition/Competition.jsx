@@ -13,7 +13,7 @@ const Competition = () => {
 	}
 
 	const submit = async () => {
-		axios.get(`http://127.0.0.1:8000/competition/verify/?session_code=${code}&email=${cookies.email}`)
+		axios.get(`https://saiteja123.pythonanywhere.com/competition/verify/?session_code=${code}&email=${cookies.email}`)
 		.then(
 			res => {
 				if (res.data.message == true) {

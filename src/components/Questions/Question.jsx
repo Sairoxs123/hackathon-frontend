@@ -43,7 +43,7 @@ const Question = () => {
         formData.append("id", qid);
         formData.append("code", code);
         formData.append("email", cookies.email);
-        axios.post("http://127.0.0.1:8000/code/save/", formData);
+        axios.post("https://saiteja123.pythonanywhere.com/code/save/", formData);
         setCodeStorage(code);
       }
       setSaved(true);
@@ -233,7 +233,7 @@ const Question = () => {
         } else {
           formdata.append("correct", false);
         }
-        axios.post("http://127.0.0.1:8000/code/submit/", formdata);
+        axios.post("https://saiteja123.pythonanywhere.com/code/submit/", formdata);
       }
     }
   }, [executed]);
@@ -259,7 +259,7 @@ const Question = () => {
   useEffect(() => {
     axios
       .get(
-        `http://127.0.0.1:8000/question/details/${qid}/?email=${cookies.email}`
+        `https://saiteja123.pythonanywhere.com/question/details/${qid}/?email=${cookies.email}`
       )
       .then((res) => {
         console.log(res.data);

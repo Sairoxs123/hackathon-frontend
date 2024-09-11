@@ -12,7 +12,7 @@ const Questions = () => {
       return (window.location.href = "/login");
     } else {
       axios
-        .get(`http://127.0.0.1:8000/questions/get/?name=${cookies.name}`)
+        .get(`https://saiteja123.pythonanywhere.com/questions/get/?name=${cookies.name}`)
         .then((res) => {
           setQuestions(res.data.questions);
         });
