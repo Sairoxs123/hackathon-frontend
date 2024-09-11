@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { redirect, useParams } from "react-router-dom";
 
 const Verification = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [message, setMessage] = useState("");
 
   const { verification } = useParams();
 
@@ -37,7 +38,7 @@ const Verification = () => {
   ];
 
   if (verification == cookies.verification) {
-    axios.post("https://hackathon-frontend-rosy-ten.vercel.app/account/signup/verify/", {
+    axios.post("https://saiteja.pythonanywhere.com/account/signup/verify/", {
       "email": cookies.email,
       "name": cookies.name,
       "password": cookies.password,
@@ -46,17 +47,19 @@ const Verification = () => {
     }).then(
       res => {
         if (res.data.message == "invalid") {
-          return <div>Verification Failed. Please try again later.</div>;
+          setMessage("Verification Failed. Please try again later.");
         } else if (res.data.message == "exists") {
-          return <div>Account already exists. Please try again later.</div>;
+          setMessage("Account already exists. Please try again later.")
         }
         removeCookie("verification")
         setCookie("logged_in", true)
         return redirect("/")
       }
     )
+  } else {
+    setMessage("Invalid token")
   }
-  return <div>Verification Success</div>;
+  return <div>{message}</div>;
 };
 
 export default Verification;
