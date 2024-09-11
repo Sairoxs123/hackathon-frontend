@@ -96,7 +96,7 @@ const Login = () => {
       <p>{message}</p>
 
       <p>
-        Don't have an account? <a href="/signup">Login</a>
+        Don't have an account? <a href="/signup">Signup</a>
       </p>
     </div>
   );
