@@ -17,7 +17,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -63,9 +62,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 98vw;
+    width: 100vw;
     height: 100vh;
     background-color: yellow;
+    font-size: 4em;
+    font-weight: 700;
 }
 
 /* Mobile Styles */

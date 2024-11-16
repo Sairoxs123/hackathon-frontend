@@ -53,7 +53,7 @@ const Coding = () => {
       formdata.append("email", cookies.email);
       formdata.append("code", code);
       formdata.append("barred", true);
-      axios.post("https://saiteja123.pythonanywhere.com/competition/code/submit/", formdata);
+      axios.post("http://127.0.0.1:8000/competition/code/submit/", formdata);
     }
   }, [isFullscreen]);
 
@@ -80,7 +80,7 @@ const Coding = () => {
         formData.append("id", compid);
         formData.append("code", code);
         formData.append("email", cookies.email);
-        axios.post("https://saiteja123.pythonanywhere.com/competition/code/save/", formData);
+        axios.post("http://127.0.0.1:8000/competition/code/save/", formData);
         setCodeStorage(code);
       }
       setSaved(true);
@@ -258,7 +258,7 @@ const Coding = () => {
           formdata.append("correct", false);
         }
         console.log(time / 3);
-        axios.post("https://saiteja123.pythonanywhere.com/competition/code/submit/", formdata);
+        axios.post("http://127.0.0.1:8000/competition/code/submit/", formdata);
       }
     }
   }, [executed]);
@@ -282,7 +282,7 @@ const Coding = () => {
   useEffect(() => {
     axios
       .get(
-        `https://saiteja123.pythonanywhere.com/competition/details/${compid}/?email=${cookies.email}`
+        `http://127.0.0.1:8000/competition/details/${compid}/?email=${cookies.email}`
       )
       .then((res) => {
         console.log(res.data);
@@ -316,7 +316,7 @@ const Coding = () => {
       formdata.append("email", cookies.email);
       formdata.append("code", code);
       formdata.append("barred", true);
-      axios.post("https://saiteja123.pythonanywhere.com/competition/code/submit/", formdata);
+      axios.post("http://127.0.0.1:8000/competition/code/submit/", formdata);
     } else {
       //document.getElementById("count").innerHTML = count;
       console.log("came back");

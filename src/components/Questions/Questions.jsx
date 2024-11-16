@@ -12,7 +12,7 @@ const Questions = () => {
       return (window.location.href = "/login");
     } else {
       axios
-        .get(`https://saiteja123.pythonanywhere.com/questions/get/?name=${cookies.name}`)
+        .get(`http://127.0.0.1:8000/questions/get/?name=${cookies.name}`)
         .then((res) => {
           setQuestions(res.data.questions);
         });
@@ -20,14 +20,14 @@ const Questions = () => {
   }, []);
 
   return (
-    <div>
+    <div className="bg-white">
       <center>
         <u>
-          <h1>Questions</h1>
+          <h1 className="text-2xl">Questions</h1>
         </u>
       </center>
-      <table border="1" width="100%">
-        <tr>
+      <table width="100%">
+        <tr className="underline">
           <th>No.</th>
           <th>Title</th>
           <th>Difficulty</th>
@@ -38,7 +38,7 @@ const Questions = () => {
             <tr key={index}>
               <td align="center">{item.id}</td>
               <td align="center">
-                <Link to={`/question/${item.id}`}>{item.title}</Link>
+                <Link to={`/question/${item.id}`} className="underline">{item.title}</Link>
               </td>
               <td align="center">{item.difficulty}</td>
               <td align="center">{item.completed == true ? "Yes" : "No"}</td>

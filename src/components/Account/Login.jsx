@@ -43,7 +43,7 @@ const Login = () => {
     ];
 
     axios
-      .post("https://saiteja123.pythonanywhere.com/account/login/", {
+      .post("http://127.0.0.1:8000/account/login/", {
         email: email,
         password: password,
         token: tokens[Math.floor(Math.random() * tokens.length)],

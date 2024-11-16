@@ -42,7 +42,7 @@ const Verification = () => {
   console.log(verification == cookies.verification)
 
   if (verification == cookies.verification) {
-    axios.post("https://saiteja123.pythonanywhere.com/account/signup/verify/", {
+    axios.post("http://127.0.0.1:8000//account/signup/verify/", {
       "email": cookies.email,
       "name": cookies.name,
       "password": cookies.password,

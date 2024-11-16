@@ -17,7 +17,7 @@ const Hero = () => {
 
   return (
     <div id="hero">
-      <div className="container">
+      <div>
         <h1 id="animation-text">{text}</h1>
       </div>
     </div>

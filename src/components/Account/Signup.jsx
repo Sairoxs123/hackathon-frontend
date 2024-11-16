@@ -71,7 +71,7 @@ const Signup = () => {
 
     const verification = generateText();
 
-    axios.post("https://saiteja123.pythonanywhere.com/account/signup/",
+    axios.post("http://127.0.0.1:8000/account/signup/",
       {
         "email":email,
         "token" : tokens[Math.floor(Math.random() * tokens.length)],

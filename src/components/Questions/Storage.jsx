@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from "react";
+import Editor from "@monaco-editor/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
-const Question = ({
-  code,
-  setCode,
-  setLastKeypress,
-  setSaved,
-  lastKeypress,
-  saved,
-}) => {
+const Question = () => {
   const [codeStorage, setCodeStorage] = useState("");
-
+  const [code, setCode] = useState("");
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [executed, setExecuted] = useState({});
   const [tokens, setTokens] = useState({});
   const [results, setResults] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [lastKeypress, setLastKeypress] = useState(null);
   const [timeSinceLastKeypress, setTimeSinceLastKeypress] = useState(0);
+  const [saved, setSaved] = useState(false);
   const [submission, setSubmission] = useState(false);
   const [time, setTime] = useState(0);
   const [memory, setMemory] = useState(0);
   const [activeTab, setActiveTab] = useState(1);
   const [execution, setExecution] = useState(null);
+
+  const handleEditorChange = (value) => {
+    setCode(value);
+    setLastKeypress(Date.now()); // update the last keypress timestamp
+    setSaved(false);
+  };
 
   useEffect(() => {
     if (lastKeypress) {
@@ -51,7 +53,7 @@ const Question = ({
     }
   }, [timeSinceLastKeypress]);
 
-  let { qid } = useParams();
+  const { qid } = useParams();
 
   const apiKeys = [
     "ceef346648mshb8b0bc0c58f92fap18fcfajsnce13d33266db",
@@ -201,7 +203,7 @@ const Question = ({
         progress: undefined, // Custom progress bar animation (e.g., a function)
         theme: "light", // Set the theme ("light" or "dark")
       });
-      setExecution(null);
+      setExecution(null)
     } else if (execution == true) {
       toast.success("Code executed successfully.", {
         position: "top-right", // Position (top-right, top-center, etc.)
@@ -214,7 +216,7 @@ const Question = ({
         theme: "light", // Set the theme ("light" or "dark")
       });
     }
-  }, [execution]);
+  }, [execution])
 
   const submit = () => {
     handle_execute(true);
@@ -303,227 +305,229 @@ const Question = ({
   }, []);
 
   return (
-    <div style={{ width: "50%", height: "95vh" }} className="bg-gray-900 text-white">
-      <div>
-        <p>{question}</p>
-        {inputs.length > 0
-          ? inputs.map((input, index) => {
-              return (
-                <>
-                  <p key={index}>Example {index + 1}</p>
-                  <pre className="examples">
-                    Input:
-                    {typeof input === "string" ? (
-                      input.includes("\n") ? (
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: inputs[index]
-                              .replace(/\n/g, "<br>")
-                              .replace(/"/g, ""),
-                          }}
-                        />
-                      ) : (
-                        <span>
-                          {input} <br />
-                        </span>
-                      )
-                    ) : (
-                      <span>
-                        {JSON.stringify(input)} <br />
-                      </span>
-                    )}
-                    Output:
-                    {typeof outputs[index] == "string" ? (
-                      <p>
-                        {typeof outputs[index].includes("\\n") ? (
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: outputs[index]
-                                .replace(/\n/g, "<br>")
-                                .replace(/"/g, ""),
-                            }}
-                          />
+    <div>
+      <div></div>
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "50%", height: "95vh" }}>
+          <div>
+            <p>{question}</p>
+            {inputs.length > 0
+              ? inputs.map((input, index) => {
+                  return (
+                    <>
+                      <p key={index}>Example {index + 1}</p>
+                      <pre className="examples">
+                        Input:
+                        {typeof input === "string" ? (
+                          input.includes("\n") ? (
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: inputs[index]
+                                  .replace(/\n/g, "<br>")
+                                  .replace(/"/g, ""),
+                              }}
+                            />
+                          ) : (
+                            <span>
+                              {input} <br />
+                            </span>
+                          )
+                        ) : (
+                          <span>
+                            {JSON.stringify(input)} <br />
+                          </span>
+                        )}
+                        Output:
+                        {typeof outputs[index] == "string" ? (
+                          <p>
+                            {typeof outputs[index].includes("\\n") ? (
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: outputs[index]
+                                    .replace(/\n/g, "<br>")
+                                    .replace(/"/g, ""),
+                                }}
+                              />
+                            ) : (
+                              <span>{JSON.stringify(output)}</span>
+                            )}
+                          </p>
+                        ) : (
+                          <span>{JSON.stringify(outputs[index])}</span>
+                        )}
+                      </pre>
+                    </>
+                  );
+                })
+              : outputs.map((output, index) => {
+                  return (
+                    <>
+                      <p key={index}>Example {index + 1}</p>
+                      Output:
+                      <pre>
+                        {typeof output == "string" ? (
+                          output.includes("\n") ? (
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: output
+                                  .replace(/\n/g, "<br>")
+                                  .replace(/"/g, ""),
+                              }}
+                            />
+                          ) : (
+                            output
+                          )
                         ) : (
                           <span>{JSON.stringify(output)}</span>
                         )}
-                      </p>
-                    ) : (
-                      <span>{JSON.stringify(outputs[index])}</span>
-                    )}
-                  </pre>
-                </>
-              );
-            })
-          : outputs.map((output, index) => {
-              return (
+                      </pre>
+                    </>
+                  );
+                })}
+            <button onClick={handle_execute}>Execute</button>
+            <button onClick={submit}>Submit</button>
+          </div>
+          <div>
+            <h3>Test Results</h3>
+            <div className="p-6">
+              {inputs.length > 0 ? (
                 <>
-                  <p key={index}>Example {index + 1}</p>
-                  Output:
-                  <pre>
-                    {typeof output == "string" ? (
-                      output.includes("\n") ? (
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: output
-                              .replace(/\n/g, "<br>")
-                              .replace(/"/g, ""),
-                          }}
-                        />
-                      ) : (
-                        output
-                      )
-                    ) : (
-                      <span>{JSON.stringify(output)}</span>
-                    )}
-                  </pre>
+                  <div className="flex space-x-4 mb-4">
+                    {inputs.map((_, index) => (
+                      <button
+                        key={index}
+                        className={
+                          results.length > 0
+                            ? results[index] === true
+                              ? activeTab === index + 1
+                                ? "tab-active px-4 py-2 rounded text-green-300"
+                                : "tab-inactive px-4 py-2 rounded text-green-600"
+                              : activeTab === index + 1
+                              ? "tab-active px-4 py-2 rounded text-red-600"
+                              : "tab-inactive px-4 py-2 rounded text-red-600"
+                            : activeTab === index + 1
+                            ? "tab-active px-4 py-2 rounded text-white"
+                            : "tab-inactive px-4 py-2 rounded text-gray-300"
+                        }
+                        onClick={() => setActiveTab(index + 1)}
+                      >
+                        Case {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                  {typeof inputs[activeTab - 1] === "string" &&
+                  JSON.stringify(inputs[activeTab - 1]).includes("\\n") ? (
+                    <div>
+                      <label>input = </label>
+                      <p
+                        type="text"
+                        className="input-box"
+                        dangerouslySetInnerHTML={{
+                          __html: inputs[activeTab - 1]
+                            .replace(/\n/g, "<br>")
+                            .replace(/"/g, ""),
+                        }}
+                        readOnly
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label>input = </label>
+                      <input
+                        type="text"
+                        className="input-box"
+                        value={JSON.stringify(inputs[activeTab - 1])}
+                        readOnly
+                      />
+                    </div>
+                  )}
+                  {typeof outputs[activeTab - 1] === "string" &&
+                  JSON.stringify(outputs[activeTab - 1]).includes("\\n") ? (
+                    <div>
+                      <label>input = </label>
+                      <p
+                        type="text"
+                        className="input-box"
+                        dangerouslySetInnerHTML={{
+                          __html: outputs[activeTab - 1]
+                            .replace(/\n/g, "<br>")
+                            .replace(/"/g, ""),
+                        }}
+                        readOnly
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label>output = </label>
+                      <input
+                        type="text"
+                        className="input-box"
+                        value={JSON.stringify(outputs[activeTab - 1])}
+                        readOnly
+                      />
+                    </div>
+                  )}
                 </>
-              );
-            })}
-        <div class="flex gap-2 ml-2">
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handle_execute}
-          >
-            Execute
-          </button>
-          <button
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            onClick={submit}
-          >
-            Submit
-          </button>
+              ) : (
+                <>
+                  <div className="flex space-x-4 mb-4">
+                    {outputs.map((_, index) => (
+                      <button
+                        key={index}
+                        className={
+                          activeTab === index + 1
+                            ? "tab-active px-4 py-2 rounded"
+                            : "tab-inactive px-4 py-2 rounded"
+                        }
+                        onClick={() => setActiveTab(index + 1)}
+                      >
+                        Case {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                  {typeof outputs[activeTab - 1] === "string" &&
+                  JSON.stringify(outputs[activeTab - 1]).includes("\\n") ? (
+                    <div>
+                      <label>output = </label>
+                      <p
+                        type="text"
+                        className="input-box"
+                        dangerouslySetInnerHTML={{
+                          __html: outputs[activeTab - 1]
+                            .replace(/\n/g, "<br>")
+                            .replace(/"/g, ""),
+                        }}
+                        readOnly
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label>output = </label>
+                      <input
+                        type="text"
+                        className="input-box"
+                        value={JSON.stringify(outputs[activeTab - 1])}
+                        readOnly
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <h3>Test Results</h3>
-        <div className="p-6">
-          {inputs.length > 0 ? (
-            <>
-              <div className="flex space-x-4 mb-4">
-                {inputs.map((_, index) => (
-                  <button
-                    key={index}
-                    className={
-                      results.length > 0
-                        ? results[index] === true
-                          ? activeTab === index + 1
-                            ? "tab-active px-4 py-2 rounded text-green-300"
-                            : "tab-inactive px-4 py-2 rounded text-green-600"
-                          : activeTab === index + 1
-                          ? "tab-active px-4 py-2 rounded text-red-600"
-                          : "tab-inactive px-4 py-2 rounded text-red-600"
-                        : activeTab === index + 1
-                        ? "tab-active px-4 py-2 rounded text-white"
-                        : "tab-inactive px-4 py-2 rounded text-gray-300"
-                    }
-                    onClick={() => setActiveTab(index + 1)}
-                  >
-                    Case {index + 1}
-                  </button>
-                ))}
-              </div>
-              {typeof inputs[activeTab - 1] === "string" &&
-              JSON.stringify(inputs[activeTab - 1]).includes("\\n") ? (
-                <div>
-                  <label>input = </label>
-                  <p
-                    type="text"
-                    className="input-box"
-                    dangerouslySetInnerHTML={{
-                      __html: inputs[activeTab - 1]
-                        .replace(/\n/g, "<br>")
-                        .replace(/"/g, ""),
-                    }}
-                    readOnly
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label>input = </label>
-                  <input
-                    type="text"
-                    className="input-box"
-                    value={JSON.stringify(inputs[activeTab - 1])}
-                    readOnly
-                  />
-                </div>
-              )}
-              {typeof outputs[activeTab - 1] === "string" &&
-              JSON.stringify(outputs[activeTab - 1]).includes("\\n") ? (
-                <div>
-                  <label>input = </label>
-                  <p
-                    type="text"
-                    className="input-box"
-                    dangerouslySetInnerHTML={{
-                      __html: outputs[activeTab - 1]
-                        .replace(/\n/g, "<br>")
-                        .replace(/"/g, ""),
-                    }}
-                    readOnly
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label>output = </label>
-                  <input
-                    type="text"
-                    className="input-box"
-                    value={JSON.stringify(outputs[activeTab - 1])}
-                    readOnly
-                  />
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              <div className="flex space-x-4 mb-4">
-                {outputs.map((_, index) => (
-                  <button
-                    key={index}
-                    className={
-                      activeTab === index + 1
-                        ? "tab-active px-4 py-2 rounded"
-                        : "tab-inactive px-4 py-2 rounded"
-                    }
-                    onClick={() => setActiveTab(index + 1)}
-                  >
-                    Case {index + 1}
-                  </button>
-                ))}
-              </div>
-              {typeof outputs[activeTab - 1] === "string" &&
-              JSON.stringify(outputs[activeTab - 1]).includes("\\n") ? (
-                <div>
-                  <label>output = </label>
-                  <p
-                    type="text"
-                    className="input-box"
-                    dangerouslySetInnerHTML={{
-                      __html: outputs[activeTab - 1]
-                        .replace(/\n/g, "<br>")
-                        .replace(/"/g, ""),
-                    }}
-                    readOnly
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label>output = </label>
-                  <input
-                    type="text"
-                    className="input-box"
-                    value={JSON.stringify(outputs[activeTab - 1])}
-                    readOnly
-                  />
-                </div>
-              )}
-            </>
-          )}
-        </div>
+        <Editor
+          height="95vh"
+          width={`50%`}
+          language="python"
+          value={code}
+          theme="vs-dark"
+          defaultValue="# Type here"
+          onChange={handleEditorChange}
+        />
       </div>
     </div>
-  );
+  )
 };
 
 export default Question;

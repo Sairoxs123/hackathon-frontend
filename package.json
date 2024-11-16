@@ -14,13 +14,19 @@
     "@uiw/react-codemirror": "^4.23.0",
     "ace-builds": "^1.35.4",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.6",
     "codemirror": "^6.0.1",
+    "igniteui-react": "^18.7.3",
     "react": "^18.3.1",
     "react-ace": "^12.0.0",
+    "react-chartjs-2": "^5.2.0",
     "react-cookie": "^7.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
-    "react-top-loading-bar": "^2.3.1"
+    "react-toastify": "^10.0.5",
+    "react-top-loading-bar": "^2.3.1",
+    "react-zoom-image": "^0.0.0",
+    "recharts": "^2.13.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
