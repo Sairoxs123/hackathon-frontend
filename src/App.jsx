@@ -19,6 +19,12 @@ import Quiz from "./components/Quiz/Quiz";
 import Results from "./components/Quiz/Results";
 import StudentResults from "./components/Admin/StudentResults";
 import QuestionAnalysis from "./components/Admin/QuestionAnalysis";
+import AdminLogin from "./components/Admin/AdminLogin";
+import AdminDashBoard from "./components/Admin/AdminDashboard";
+import ProfileLayout from "./components/Profile/ProfileLayout";
+import Profile from "./components/Profile/Profile";
+import Info from "./components/Profile/Info";
+import Change from "./components/Profile/Change";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -72,6 +78,8 @@ const App = () => {
           <Route path="/competition" element={<Competitions />} />
           <Route path="/competition/:compid" element={<Competition />} />
           <Route path="/admin">
+            <Route index element={<AdminDashBoard />} />
+            <Route path="login" element={<AdminLogin />} />
             <Route path="quiz">
               <Route index element={<QuizAdmin />} />
               <Route path="create" element={<QuizCreate />} />
@@ -86,6 +94,11 @@ const App = () => {
             <Route index element={<Quizzes />} />
             <Route path=":id" element={<Quiz />} />
             <Route path=":id/results" element={<Results />} />
+          </Route>
+          <Route path="/profile" element={<ProfileLayout />}>
+            <Route index element={<Profile />} />
+            <Route path="information" element={<Info />} />
+            <Route path="information/change" element={<Change />} />
           </Route>
         </Routes>
       </div>

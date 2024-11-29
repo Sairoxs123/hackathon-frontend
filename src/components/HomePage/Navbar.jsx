@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 function Navbar() {
   const navbarRef = useRef(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   return (
     <nav
@@ -15,16 +17,21 @@ function Navbar() {
         </Link>
         <ul className="nav-links">
           <li>
-            <Link to="/questions">Home</Link>
+            <Link to="/questions" className="font-bold">Home</Link>
           </li>
           <li>
-            <Link to="#">About</Link>
+            <Link to="#" className="font-bold">About</Link>
           </li>
           <li>
-            <Link to="#">Services</Link>
+            <Link to="#" className="font-bold">Profile</Link>
           </li>
           <li>
-            <Link to="#">Contact</Link>
+            {
+              cookies.logged_in ? <button onClick={() => {
+                removeCookie("logged_in")
+                window.location.href = "/login"
+              }} className="font-bold">Logout</button> : <Link to="/login" className="font-bold">Login</Link>
+            }
           </li>
         </ul>
         <button className="hamburger" onClick={() => navbarRef.current.classList.toggle("active")}>

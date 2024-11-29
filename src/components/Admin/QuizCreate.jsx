@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useCookies } from "react-cookie";
 
 const QuizCreate = () => {
   const [quizTitle, setQuizTitle] = useState('');
@@ -17,6 +18,12 @@ const QuizCreate = () => {
   const [isMultiCorrect, setIsMultiCorrect] = useState(false); // Global state
   const [startDateTime, setStartDateTime] = useState('');
   const [endDateTime, setEndDateTime] = useState('');
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
+  if (!cookies.admin_logged_in) {
+    return window.location.href = "/admin/login"
+  }
+
 
   const handleMultiCorrectChange = () => {
     setIsMultiCorrect(!isMultiCorrect);

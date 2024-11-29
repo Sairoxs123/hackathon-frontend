@@ -19,28 +19,6 @@ const Submissions = () => {
       });
   }, []);
 
-  const data = [
-    {
-      status: "Accepted",
-      date: "Jul 04, 2024",
-      runtime: "5728 ms",
-      memory: "12.5 MB",
-    },
-    {
-      status: "Accepted",
-      date: "Oct 15, 2023",
-      runtime: "5750 ms",
-      memory: "14 MB",
-    },
-    {
-      status: "Accepted",
-      date: "Aug 04, 2023",
-      runtime: "5796 ms",
-      memory: "14.1 MB",
-    },
-
-  ];
-
   return (
     <div style={{ width: "50%", height: "95vh" }} className="bg-gray-900 text-white">
       <div className="p-4">

@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const QuizAdmin = () => {
   const [quizzes, setQuizzes] = useState([]);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
+  if (!cookies.admin_logged_in) {
+    return window.location.href = "/admin/login"
+  }
 
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/owner/quiz/get/").then((res) => {

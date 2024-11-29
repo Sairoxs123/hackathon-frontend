@@ -3,13 +3,18 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
+import { useCookies } from "react-cookie";
 
 const QuestionAnalysis = () => {
   const { id } = useParams();
 
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
+  if (!cookies.admin_logged_in) {
+    return window.location.href = "/admin/login"
+  }
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/owner/question/analysis/?question_id=${id}`)

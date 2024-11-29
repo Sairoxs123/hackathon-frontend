@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const QuizDetails = () => {
   const { id } = useParams();
@@ -21,6 +22,12 @@ const QuizDetails = () => {
   const [isMultiCorrect, setIsMultiCorrect] = useState(false); // Global state
   const [startDateTime, setStartDateTime] = useState("");
   const [endDateTime, setEndDateTime] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
+  if (!cookies.admin_logged_in) {
+    return window.location.href = "/admin/login"
+  }
+
 
   const parseQuestionsData = (data) => {
     return data.questions.map((question) => ({

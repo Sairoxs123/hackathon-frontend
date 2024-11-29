@@ -3,6 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 const Question = ({
   code,
@@ -165,9 +167,9 @@ const Question = ({
               .then((response) => {
                 setExecuted((prevExecuted) => ({
                   ...prevExecuted,
-                  exec: response.data.spout,
+                  exec: response.data.stdout,
                 }));
-                console.log(response.data.spout);
+                console.log(response.data.stdout);
                 totalTime += Number(response.data.time);
                 totalMemory += response.data.memory;
                 setTime(totalTime);
@@ -274,15 +276,22 @@ const Question = ({
     if (typeof a === "undefined" || typeof b === "undefined") {
       return;
     }
-    a = JSON.stringify(a)
-      .replace(/\\n/g, "")
-      .replace(/\s+/g, "")
-      .replace(/["']/g, "");
-    b = JSON.stringify(b)
-      .replace(/\\n/g, "")
-      .replace(/\s+/g, "")
-      .replace(/["']/g, "");
+    if (typeof a === "string" && typeof b === "string") {
+      a = a.trim("\\n")
+      b = b.trim("\\n")
 
+    } else {
+      a = JSON.stringify(a)
+        .replace(/\\n/g, "")
+        .replace(/\s+/g, "")
+        .replace(/["']/g, "");
+      b = JSON.stringify(b)
+        .replace(/\\n/g, "")
+        .replace(/\s+/g, "")
+        .replace(/["']/g, "");
+    }
+    console.log(a);
+    console.log(b);
     return a === b;
   }
 
@@ -300,16 +309,73 @@ const Question = ({
         setOutputs(res.data.outputs);
         setCode(res.data.code);
       });
+    if (!localStorage.getItem("question_tour")) {
+      const driverObj = driver({
+        showProgress: true,
+        steps: [
+          {
+            element: ".question",
+            popover: {
+              title: "Question",
+              description:
+                "Here you can see the question along with examples of input and output.",
+            },
+          },
+          {
+            element: ".editor",
+            popover: {
+              title: "Python Text Editor",
+              description:
+                "Type your python code here. Your code will be automatically saved into the cloud.",
+            },
+          },
+          {
+            element: ".execute",
+            popover: {
+              title: "Test Your Code",
+              description: "Click this button to test your code.",
+            },
+          },
+          {
+            element: ".submit",
+            popover: {
+              title: "Submit Your Code",
+              description: "Click this button to submit your code.",
+            },
+          },
+          {
+            element: ".test_results",
+            popover: {
+              title: "Test Results",
+              description:
+                "After testing or submitting your code, the outputs will be turn green if its correct and red if its wrong. Only if all the test cases are satisfied your submission will be marked as correct.",
+            },
+          },
+          {
+            element: ".submissions",
+            popover: {
+              title: "Past Submissions",
+              description: "Click here to view your past submissions.",
+            },
+          },
+        ],
+      });
+      driverObj.drive();
+      localStorage.setItem("question_tour", true);
+    }
   }, []);
 
   return (
-    <div style={{ width: "50%", height: "95vh" }} className="bg-gray-900 text-white">
-      <div>
+    <div
+      style={{ width: "50%", height: "95vh" }}
+      className="bg-gray-900 text-white"
+    >
+      <div className="question">
         <p>{question}</p>
         {inputs.length > 0
           ? inputs.map((input, index) => {
               return (
-                <>
+                <div className="mt-1">
                   <p key={index}>Example {index + 1}</p>
                   <pre className="examples">
                     Input:
@@ -351,12 +417,13 @@ const Question = ({
                       <span>{JSON.stringify(outputs[index])}</span>
                     )}
                   </pre>
-                </>
+                  <br />
+                </div>
               );
             })
           : outputs.map((output, index) => {
               return (
-                <>
+                <div className="mt-1">
                   <p key={index}>Example {index + 1}</p>
                   Output:
                   <pre>
@@ -376,25 +443,25 @@ const Question = ({
                       <span>{JSON.stringify(output)}</span>
                     )}
                   </pre>
-                </>
+                </div>
               );
             })}
-        <div class="flex gap-2 ml-2">
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handle_execute}
-          >
-            Execute
-          </button>
-          <button
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            onClick={submit}
-          >
-            Submit
-          </button>
-        </div>
       </div>
-      <div>
+      <div class="flex gap-2 ml-2">
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded execute"
+          onClick={handle_execute}
+        >
+          Execute
+        </button>
+        <button
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded submit"
+          onClick={submit}
+        >
+          Submit
+        </button>
+      </div>
+      <div className="test_results">
         <h3>Test Results</h3>
         <div className="p-6">
           {inputs.length > 0 ? (
@@ -482,9 +549,17 @@ const Question = ({
                   <button
                     key={index}
                     className={
-                      activeTab === index + 1
-                        ? "tab-active px-4 py-2 rounded"
-                        : "tab-inactive px-4 py-2 rounded"
+                      results.length > 0
+                        ? results[index] === true
+                          ? activeTab === index + 1
+                            ? "tab-active px-4 py-2 rounded text-green-300"
+                            : "tab-inactive px-4 py-2 rounded text-green-600"
+                          : activeTab === index + 1
+                          ? "tab-active px-4 py-2 rounded text-red-600"
+                          : "tab-inactive px-4 py-2 rounded text-red-600"
+                        : activeTab === index + 1
+                        ? "tab-active px-4 py-2 rounded text-white"
+                        : "tab-inactive px-4 py-2 rounded text-gray-300"
                     }
                     onClick={() => setActiveTab(index + 1)}
                   >

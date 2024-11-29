@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const StudentResults = () => {
   const { quiz_id, email, datetime } = useParams();
   const [result, setResult] = useState({});
   const [score, setScore] = useState("");
   const [multiple, setMultiple] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
+  if (!cookies.admin_logged_in) {
+    return window.location.href = "/admin/login"
+  }
+
 
   const formatDate = (dateString) => {
     // Create a new Date object from the date string

@@ -4,7 +4,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import "./coding.css";
 
 const Competition = () => {
   const [codeStorage, setCodeStorage] = useState("");
@@ -26,6 +25,7 @@ const Competition = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [execution, setExecution] = useState(null);
   const [question, setQuestion] = useState("");
+  const [batteryLevel, setBatteryLevel] = useState(null);
 
   const handleFullscreen = () => {
     if (!isFullscreen && !disabled) {
@@ -371,9 +371,34 @@ const Competition = () => {
     }
   };
 
+  useEffect(() => {
+    // Check if Battery API is supported
+    if (navigator.getBattery) {
+      navigator.getBattery().then((battery) => {
+        setBatteryLevel(battery.level * 100);
+
+        battery.addEventListener('levelchange', () => {
+          setBatteryLevel(battery.level * 100);
+        });
+      });
+    } else {
+      console.log("Battery API not supported."); // Or handle this gracefully
+    }
+  }, []);
+
   return (
     <div onClick={handleFullscreen} className="bg-white">
-      <div></div>
+      <nav className="flex justify-between items-center p-4 bg-gray-800"> {/* Added Tailwind classes */}
+        {/* Other nav items can go here */}
+
+        {batteryLevel !== null && ( // Conditionally render battery info
+          <div className="flex items-center space-x-2 text-white"> {/* More Tailwind */}
+            <i className="fas fa-battery-full text-yellow-400"></i> {/* Battery icon */}
+             {/* Use battery charging icon when charging */}
+            <span>{Math.round(batteryLevel)}%</span>
+          </div>
+        )}
+      </nav>
       <div style={{ display: "flex" }}>
         <div style={{ width: "50%", height: "95vh" }}>
           <div>
