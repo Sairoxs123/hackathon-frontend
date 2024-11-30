@@ -25,6 +25,9 @@ import ProfileLayout from "./components/Profile/ProfileLayout";
 import Profile from "./components/Profile/Profile";
 import Info from "./components/Profile/Info";
 import Change from "./components/Profile/Change";
+import CompNQuestion from "./components/Admin/CompNQuestion";
+import CompNQuestionDetails from "./components/Admin/CompNQuestionDetails";
+import CreateCompNQuestion from "./components/Admin/CreateCompNQuestion";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -88,6 +91,11 @@ const App = () => {
                 <Route path=":quiz_id/:email/" element={<StudentResults />} />
               </Route>
               <Route path="question/:id" element={<QuestionAnalysis />} />
+            </Route>
+            <Route path="questions-competitions">
+              <Route index element={<CompNQuestion />} />
+              <Route path="create" element={<CreateCompNQuestion />} />
+              <Route path="details/:id" element={<CompNQuestionDetails />} />
             </Route>
           </Route>
           <Route path="/quiz">
