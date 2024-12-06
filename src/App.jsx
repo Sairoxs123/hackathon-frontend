@@ -95,7 +95,7 @@ const App = () => {
             <Route path="questions-competitions">
               <Route index element={<CompNQuestion />} />
               <Route path="create" element={<CreateCompNQuestion />} />
-              <Route path="details/:id" element={<CompNQuestionDetails />} />
+              <Route path="details/:type/:id" element={<CompNQuestionDetails />} />
             </Route>
           </Route>
           <Route path="/quiz">
