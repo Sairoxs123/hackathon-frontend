@@ -16,9 +16,30 @@ const CompNQuestion = () => {
 
   return (
     <div>
-      <div className="flex justify-center">
-        <button onClick={() => setScreen("q")}>Questions</button>
-        <button onClick={() => setScreen("c")}>Competitions</button>
+            <div className="flex w-full bg-gray-100 rounded-lg p-2 mb-4">
+        <button
+          onClick={() => setScreen("q")}
+          className={`w-1/2 py-2 text-lg font-medium rounded-lg mr-2
+            ${
+              screen === "q"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-200"
+            }`}
+        >
+          Questions
+        </button>
+        <button
+          onClick={() => setScreen("c")}
+          className={`w-1/2 py-2 text-lg font-medium rounded-lg
+            ${
+              screen === "c"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-200"
+            }`}
+          tabIndex={1}
+        >
+          Competitions
+        </button>
       </div>
       {screen == "q" ?
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import sendRequest from "../../utils/utils";
 
 const Question = ({
   code,
@@ -46,7 +47,7 @@ const Question = ({
         formData.append("id", qid);
         formData.append("code", code);
         formData.append("email", cookies.email);
-        axios.post("http://127.0.0.1:8000/code/save/", formData);
+        sendRequest("POST", "/code/save/", formData);
         setCodeStorage(code);
       }
       setSaved(true);
@@ -72,7 +73,6 @@ const Question = ({
     setMemory(0);
     let totalTime = 0;
     let totalMemory = 0;
-    console.log(apiKeys[apiKey]);
     if (inputs.length > 0) {
       for (let i = 0; i < inputs.length; i++) {
         const options = {
@@ -169,7 +169,6 @@ const Question = ({
                   ...prevExecuted,
                   exec: response.data.stdout,
                 }));
-                console.log(response.data.stdout);
                 totalTime += Number(response.data.time);
                 totalMemory += response.data.memory;
                 setTime(totalTime);
@@ -254,7 +253,6 @@ const Question = ({
           )
         );
       }
-      //console.log(submission)
       if (submission) {
         let formdata = new FormData();
         formdata.append("id", qid);
@@ -267,7 +265,7 @@ const Question = ({
         } else {
           formdata.append("correct", false);
         }
-        axios.post("http://127.0.0.1:8000/code/submit/", formdata);
+        sendRequest("POST", "/code/submit/", formdata);
       }
     }
   }, [executed]);
@@ -290,8 +288,6 @@ const Question = ({
         .replace(/\s+/g, "")
         .replace(/["']/g, "");
     }
-    console.log(a);
-    console.log(b);
     return a === b;
   }
 
@@ -303,7 +299,6 @@ const Question = ({
         `http://127.0.0.1:8000/question/details/${qid}/?email=${cookies.email}`
       )
       .then((res) => {
-        console.log(res.data);
         setQuestion(res.data.question);
         setInputs(res.data.inputs);
         setOutputs(res.data.outputs);
@@ -375,8 +370,8 @@ const Question = ({
         {inputs.length > 0
           ? inputs.map((input, index) => {
               return (
-                <div className="mt-1">
-                  <p key={index}>Example {index + 1}</p>
+                <div className="mt-1" key={index}>
+                  <p>Example {index + 1}</p>
                   <pre className="examples">
                     Input:
                     {typeof input === "string" ? (
@@ -447,15 +442,15 @@ const Question = ({
               );
             })}
       </div>
-      <div class="flex gap-2 ml-2">
+      <div className="flex gap-2 ml-2">
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded execute"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded execute"
           onClick={handle_execute}
         >
           Execute
         </button>
         <button
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded submit"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded submit"
           onClick={submit}
         >
           Submit

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import sendRequest from "../../utils/utils";
 
 const Quiz = () => {
   const { id } = useParams();
@@ -92,9 +93,8 @@ const Quiz = () => {
     }
 
     try {
-      axios
-        .post(
-          "http://127.0.0.1:8000/user/quiz/submit/", // Replace with your API endpoint
+      sendRequest("post",
+          "/user/quiz/submit/", // Replace with your API endpoint
           formData
         )
         .then((res) => {

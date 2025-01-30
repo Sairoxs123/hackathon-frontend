@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const sendRequest = (method, url, data) => {
+const sendRequest = (method, url, data, config) => {
   function caesarCipher(text, key) {
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = '';
@@ -20,43 +20,6 @@ const sendRequest = (method, url, data) => {
     return result;
   }
 
-  //function vigenereCipher(text, keyword) {
-  //  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  //  let result = '';
-  //  keyword = keyword.toUpperCase();
-  //  let keywordIndex = 0;
-//
-  //  for (let i = 0; i < text.length; i++) {
-  //    const char = text[i].toUpperCase();
-  //    const isLetter = alphabet.includes(char);
-//
-  //    if (isLetter) {
-  //      const textIndex = alphabet.indexOf(char);
-  //      const keywordChar = keyword[keywordIndex % keyword.length];
-  //      const keywordIndexInAlphabet = alphabet.indexOf(keywordChar);
-  //      const newIndex = (textIndex + keywordIndexInAlphabet) % 26;
-  //      result += alphabet[newIndex];
-  //      keywordIndex++;
-  //    } else {
-  //      result += char; // Non-letter characters are unchanged
-  //    }
-  //  }
-//
-  //  return result;
-  //}
-
-  function xorEncryptDecrypt(input, key) {
-    let output = '';
-    for (let i = 0; i < input.length; i++) {
-      output += String.fromCharCode(input.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-    }
-    return output;
-  }
-
-  function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   function getRandomElement(arr) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
@@ -66,20 +29,11 @@ const sendRequest = (method, url, data) => {
   if (method == "get") {
     return axios.get(`http://127.0.0.1:8000${url}`).then((res) => { return res.data })
   } else {
-    const randomNumber = getRandomNumber(1, 2);
     const randomKeyword = getRandomElement(keywords);
     let encryptedData = "";
-    if (randomNumber == 1) {
-      encryptedData = caesarCipher(randomKeyword, "sai teja sagiraju");
-    } else if (randomNumber == 2) {
-      encryptedData = xorEncryptDecrypt(randomKeyword, "sai teja sagiraju");
-      //encryptedData = vigenereCipher(randomKeyword, "sai teja sagiraju");
-    } //else {
-      //encryptedData = xorEncryptDecrypt(randomKeyword, "sai teja sagiraju");
-    //}
+    encryptedData = caesarCipher(randomKeyword, "sai teja sagiraju");
     data.append("encrypted", encryptedData);
-    data.append("algorithm", randomNumber);
-    return axios.post(`http://127.0.0.1:8000${url}`, data)
+    return axios.post(`http://127.0.0.1:8000${url}`, data, config)
     .then((res) => {
       return res.data
     })

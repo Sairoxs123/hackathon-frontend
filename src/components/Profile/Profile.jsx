@@ -16,11 +16,11 @@ const Profile = () => {
   }, []);
   return (
     <div>
-      {typeof profileData == "object" ? (
+      {typeof profileData == "object" && (
         <>
           <div className="p-8 rounded-lg shadow-lg transform scale-110 mt-6 w-1/2 mx-auto bg-white">
             <h1 className="text-center text-2xl font-bold underline mb-5">
-              Questions Data
+              Coding Questions
             </h1>
             <div className="flex items-center space-x-8 justify-center">
               <div
@@ -138,8 +138,6 @@ const Profile = () => {
             </div>
           </div>
         </>
-      ) : (
-        <div>An error has occured.</div>
       )}
     </div>
   );

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { DataGrid } from "@mui/x-data-grid";
+import Paper from "@mui/material/Paper";
+import sendRequest from "../../utils/utils";
 
 const QuizDetails = () => {
   const { id } = useParams();
@@ -22,6 +25,7 @@ const QuizDetails = () => {
   const [isMultiCorrect, setIsMultiCorrect] = useState(false); // Global state
   const [startDateTime, setStartDateTime] = useState("");
   const [endDateTime, setEndDateTime] = useState("");
+  const [difficulty, setDifficulty] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   if (!cookies.admin_logged_in) {
@@ -68,10 +72,11 @@ const QuizDetails = () => {
 };
 
   useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/owner/quiz/get/responses/${id}/`)
+    sendRequest("get", `/owner/quiz/get/responses/${id}/`)
       .then((res) => {
-        setResults(res.data.submissions);
+        console.log(res.submissions);
+        setResults(res.submissions);
+        console.log(res.submissions)
       });
   }, []);
 
@@ -83,18 +88,19 @@ const QuizDetails = () => {
 
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/owner/quiz/get/details/${id}/`)
+    sendRequest("get", `/owner/quiz/get/details/${id}/`)
     .then((res) => {
-      setQuizTitle(res.data.details[0].title)
-      setGrade(res.data.details[0].grade) // Set grade
-      setSection(res.data.details[0].section) // Set section
-      setIsMultiCorrect(!res.data.details[0].single_submit)
-      if (res.data.details[0].single_submit == true){
-        setStartDateTime(formatDateTimeForInput(res.data.details[0].start_time));
-        setEndDateTime(formatDateTimeForInput(res.data.details[0].end_time));
-        setSection(res.data.details[0].section)
+      setQuizTitle(res.details[0].title)
+      setGrade(res.details[0].grade) // Set grade
+      setSection(res.details[0].section) // Set section
+      setIsMultiCorrect(!res.details[0].single_submit)
+      setDifficulty(res.details[0].difficulty)
+      if (res.details[0].single_submit == true){
+        setStartDateTime(formatDateTimeForInput(res.details[0].start_time));
+        setEndDateTime(formatDateTimeForInput(res.details[0].end_time));
+        setSection(res.details[0].section)
       }
-      setQuestions(parseQuestionsData(res.data.details[0]))
+      setQuestions(parseQuestionsData(res.details[0]))
     })
   }, [])
 
@@ -125,6 +131,11 @@ const QuizDetails = () => {
   const handleQuizTitleChange = (event) => {
     setQuizTitle(event.target.value);
   };
+
+  const handleDifficultyChange = (event) => {
+    setDifficulty(event.target.value);
+  };
+
 
   const handleGradeChange = (event) => {
     setGrade(event.target.value);
@@ -274,7 +285,7 @@ const QuizDetails = () => {
     formData.append("grade", grade); // Add grade to formData
     formData.append("single_submit", isMultiCorrect);
     formData.append("number_of_questions", questions.length);
-
+    formData.append("difficulty", difficulty);
     if (!isMultiCorrect) {
       formData.append("start_datetime", startDateTime);
       formData.append("end_datetime", endDateTime);
@@ -314,8 +325,8 @@ const QuizDetails = () => {
     });
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/owner/quiz/update/",
+      sendRequest("post",
+        "/owner/quiz/update/",
         formData,
         {
           headers: {
@@ -323,7 +334,6 @@ const QuizDetails = () => {
           },
         }
       );
-      console.log("Quiz created:", response.data);
     } catch (error) {
       console.error("Error creating quiz:", error);
     }
@@ -342,6 +352,14 @@ const QuizDetails = () => {
       console.error("Error creating quiz:", error);
     }
   }
+
+  const columns = [
+    { field: 'name', headerName: 'Name', width: 300 },
+    { field: 'class', headerName: 'Class', width: 300 },
+    { field: "score", headerName: "Score", width: 300 },
+    { field: 'datetime', headerName: 'Submit Time', width: 300, valueFormatter: (params) => formatDate(params) }
+  ];
+  const paginationModel = { page: 0, pageSize: 5 };
 
   return (
     <div className="p-4">
@@ -377,42 +395,20 @@ const QuizDetails = () => {
         {screen === "results" ? (
           <div className="overflow-x-auto">
             <button onClick={deleteSubmissions} className="px-4 ml-1 mb-5 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-blue-300">Delete Submissions</button>
-            <table className="min-w-full border-collapse border border-gray-200">
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 bg-gray-100">
-                    Name
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 bg-gray-100">
-                    Class
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 bg-gray-100">
-                    Results
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 bg-gray-100">
-                    Submitted Datetime
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((result, index) => (
-                  <tr key={index} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      <Link to={`/admin/quiz/details/1/${result.id}/${result.email}`}>{result.name}</Link>
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {result.class}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {result.score}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {formatDate(result.datetime)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <Paper sx={{ height: 400, width: "100%" }}>
+              <DataGrid
+                rows={results}
+                columns={columns}
+                initialState={{ pagination: { paginationModel } }}
+                pageSizeOptions={[5, 10, 15, 25, 50, 100]}
+                sx={{
+                  '& .MuiDataGrid-cell': {
+                    fontSize: 16, // Adjust the font size as needed
+                  },
+                }}
+                onRowClick={(params) => window.location.href += params.row.email}
+              />
+            </Paper>
           </div>
         ) : (
           <div className="flex flex-col items-center p-4">
@@ -429,6 +425,23 @@ const QuizDetails = () => {
                   id="quizTitle"
                   value={quizTitle}
                   onChange={handleQuizTitleChange}
+                  required
+                  className="mt-1 p-2 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="difficulty"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Difficulty:
+                </label>
+                <input
+                  type="text"
+                  id="difficulty"
+                  value={difficulty}
+                  onChange={handleDifficultyChange}
                   required
                   className="mt-1 p-2 w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 />

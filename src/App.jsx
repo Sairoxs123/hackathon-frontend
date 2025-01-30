@@ -9,7 +9,6 @@ import Competitions from "./components/Competition/Competitions";
 import Competition from "./components/Competition/Competition";
 import ProgressBar from "./ProgressBar";
 import Layout from "./components/Questions/Layout";
-import Solutions from "./components/Questions/Solutions";
 import Submissions from "./components/Questions/Submissions";
 import QuizAdmin from "./components/Admin/QuizAdmin";
 import QuizCreate from "./components/Admin/QuizCreate";
@@ -28,6 +27,8 @@ import Change from "./components/Profile/Change";
 import CompNQuestion from "./components/Admin/CompNQuestion";
 import CompNQuestionDetails from "./components/Admin/CompNQuestionDetails";
 import CreateCompNQuestion from "./components/Admin/CreateCompNQuestion";
+import CompNQuestionStudentResults from "./components/Admin/CompNQuestionStudentResults";
+import CreateUpdates from "./components/Admin/CreateUpdates";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -83,19 +84,23 @@ const App = () => {
           <Route path="/admin">
             <Route index element={<AdminDashBoard />} />
             <Route path="login" element={<AdminLogin />} />
+            <Route path="updates" element={<CreateUpdates />} />
             <Route path="quiz">
               <Route index element={<QuizAdmin />} />
               <Route path="create" element={<QuizCreate />} />
               <Route path="details/:id">
                 <Route index element={<QuizDetails />} />
-                <Route path=":quiz_id/:email/" element={<StudentResults />} />
+                <Route path=":email/" element={<StudentResults />} />
               </Route>
               <Route path="question/:id" element={<QuestionAnalysis />} />
             </Route>
             <Route path="questions-competitions">
               <Route index element={<CompNQuestion />} />
               <Route path="create" element={<CreateCompNQuestion />} />
-              <Route path="details/:type/:id" element={<CompNQuestionDetails />} />
+              <Route path="details/:type/:id">
+                <Route index element={<CompNQuestionDetails />} />
+                <Route path=":email/" element={<CompNQuestionStudentResults />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/quiz">

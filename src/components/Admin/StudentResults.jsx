@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
 const StudentResults = () => {
-  const { quiz_id, email, datetime } = useParams();
+  const { id, quiz_id, email } = useParams();
   const [result, setResult] = useState({});
   const [score, setScore] = useState("");
   const [multiple, setMultiple] = useState(null);
@@ -67,7 +67,7 @@ const StudentResults = () => {
   useEffect(() => {
     axios
       .get(
-        `http://127.0.0.1:8000/user/quiz/get/results/?quiz_id=${quiz_id}&email=${email}&datetime=${datetime}`
+        `http://127.0.0.1:8000/user/quiz/get/results/?quiz_id=${id}&email=${email}`
       )
       .then((response) => {
         if (response.data.multiple) {
@@ -102,7 +102,10 @@ const StudentResults = () => {
             {result &&
               result.map((question, index) => (
                 <div key={index} className="mb-8">
-                  <p className="font-bold text-xl mb-4">Q{index + 1}:-</p>
+                  <div className="flex justify-between">
+                    <p className="font-bold text-xl mb-4">Q{index + 1}:-</p>
+                    <Link to={`/admin/quiz/question/${question.id}`}>View Question Analysis</Link>
+                  </div>
                   <div className="mb-4 flex w-full justify-center">
                     {question.image && (
                       <img
@@ -165,7 +168,10 @@ const StudentResults = () => {
                 <h1 className="font-bold text-2xl mb-xl text-center">Score: <span className="text-green-600">{value.score}</span></h1>
                 {value.questions.map((question, index) => (
                 <div key={index} className="mb-8">
-                  <p className="font-bold text-xl mb-4">Q{index + 1}:-</p>
+                  <div className="flex justify-between">
+                    <p className="font-bold text-xl mb-4">Q{index + 1}:-</p>
+                    <Link to={`/admin/quiz/question/${question.id}`}>View Question Analysis</Link>
+                  </div>
                   <div className="mb-4 flex w-full justify-center">
                     {question.image && (
                       <img

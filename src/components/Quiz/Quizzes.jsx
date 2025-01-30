@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
+import { DataGrid } from "@mui/x-data-grid";
+import { Paper } from "@mui/material";
 
 const Quizzes = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -15,48 +17,67 @@ const Quizzes = () => {
       });
   }, []);
 
-  const [searchTerm, setSearchTerm] = React.useState("");
+
+  const columns = [
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      renderCell: (params) => {
+        if (params.row.status) {
+          return <i className="fas fa-check-circle text-green-400"></i>;
+        } else {
+          return null;
+        }
+      },
+    },
+    { field: "title", headerName: "Title", width: 800 },
+    {
+      field: "score",
+      headerName: "Score",
+      width: 200,
+      renderCell: (params) => {
+        if (params.row.score) {
+          return params.row.score;
+        } else {
+          return "-";
+        }
+      },
+    },
+    {
+      field: "difficulty",
+      headerName: "Difficulty",
+      width: 300,
+      renderCell: (params) => {
+        return (
+          <div className={params.row.difficultyColor}>
+            {params.row.difficulty}
+          </div>
+        );
+      },
+    },
+  ];
+
+  const paginationModel = { page: 0, pageSize: 5 };
 
   return (
     <div className="overflow-x-auto">
-      <h1 className="text-2xl font-bold mb-4">Quizzes</h1>
-      <input
-        type="text"
-        placeholder="Search..."
-        className="mb-4 p-2 w-full bg-gray-700 text-white rounded"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <table className="min-w-full bg-gray-800 text-white">
-        <thead>
-          <tr className="text-gray-400 text-center">
-            <th className="py-2 px-4">Status</th>
-            <th className="py-2 px-4">Title</th>
-            <th className="py-2 px-4">Score</th>
-            <th className="py-2 px-4">Difficulty</th>
-          </tr>
-        </thead>
-        <tbody>
-          {quizzes.map((problem, index) => (
-            <tr key={index} className="border-t border-gray-700 text-center">
-              <td className="py-2 px-4">
-                {problem.status === "completed" && (
-                  <i className="fas fa-check-circle text-green-400"></i>
-                )}
-              </td>
-              <td className="py-2 px-4">
-                <Link to={`/quiz/${problem.id}`} className="text-blue-500 underline hover:text-blue-700">
-                  {problem.title}
-                </Link>
-              </td>
-              <td className="py-2 px-4">{problem.score ? problem.score : "-"}</td>
-              <td className={`py-2 px-4 ${problem.difficultyColor}`}>
-                {problem.difficulty}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Paper sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={quizzes}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10, 15, 25, 50, 100]}
+          sx={{
+            "& .MuiDataGrid-cell": {
+              fontSize: 16, // Adjust the font size as needed
+            },
+          }}
+          onRowClick={(params) =>
+            (window.location.href = `quiz/${params.row.id}`)
+          }
+        />
+      </Paper>
     </div>
   );
 };
