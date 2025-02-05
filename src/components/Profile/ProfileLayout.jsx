@@ -31,6 +31,7 @@ export default function ProfileLayout({ children }) {
                 removeCookie("logged_in")
                 window.location.href = "/login"
             }} className="text-gray-300 hover:text-white">Logout</Link>
+            <Link to="/delete" className="text-gray-300 hover:text-white">Delete Account</Link>
           </div>
         </div>
       </nav>

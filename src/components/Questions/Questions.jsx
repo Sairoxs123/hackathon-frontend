@@ -27,7 +27,7 @@ const Questions = () => {
     {
       field: "difficulty",
       headerName: "Difficulty",
-      width: 400,
+      width: 100,
       renderCell: (params) => {
         return (
           <div className={params.row.difficultyColor}>
@@ -39,7 +39,7 @@ const Questions = () => {
     {
       field: 'status',
       headerName: 'Status',
-      width: 400,
+      width: 100,
       renderCell: (params) => {
         if (params.row.in_progress) {
           return <i className="fas fa-pencil-alt text-yellow-400"></i>;
@@ -56,7 +56,7 @@ const Questions = () => {
 
   return (
     <div className="overflow-x-auto">
-      <Paper sx={{ height: "100vh", width: '100%' }}>
+      <Paper sx={{ height: "75vh", width: '70%', margin: 'auto', marginTop: '5%' }}>
         <DataGrid
           rows={questions}
           columns={columns}

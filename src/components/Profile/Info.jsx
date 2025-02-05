@@ -28,6 +28,21 @@ const Info = () => {
     );
   }, []);
 
+  const generateText = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    const length = Math.floor(Math.random() * 20) + 10; // Random length between 10 and 30
+
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+
+    return result;
+  };
+
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('name', name);
@@ -49,6 +64,8 @@ const Info = () => {
       }
     })
   }
+
+
 
   return (
     <div className="flex justify-center items-center h-screen">

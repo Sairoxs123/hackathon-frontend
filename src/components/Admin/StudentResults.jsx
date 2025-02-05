@@ -104,7 +104,7 @@ const StudentResults = () => {
                 <div key={index} className="mb-8">
                   <div className="flex justify-between">
                     <p className="font-bold text-xl mb-4">Q{index + 1}:-</p>
-                    <Link to={`/admin/quiz/question/${question.id}`}>View Question Analysis</Link>
+                    <Link to={`/admin/quiz/question/${question.id}`} >View Question Analysis</Link>
                   </div>
                   <div className="mb-4 flex w-full justify-center">
                     {question.image && (
@@ -136,7 +136,7 @@ const StudentResults = () => {
                         <input
                           type="radio"
                           id={`option-${option.id}`}
-                          name={`question-${question.id}`}
+                          name={`question-${question.id}-${oindex}`}
                           value={option.id}
                           className="mr-4"
                           disabled
@@ -164,64 +164,64 @@ const StudentResults = () => {
           {Object.entries(result).map(([key, value], index) => {
             return (
               <div key={index} className="bg-white p-8 rounded-lg shadow-md w-full md:w-2/3 lg:w-1/2 mb-4">
-                <h1 className="font-bold text-3xl mb-4 text-center">Quiz Submitted on {formatDate(key)}</h1>
-                <h1 className="font-bold text-2xl mb-xl text-center">Score: <span className="text-green-600">{value.score}</span></h1>
-                {value.questions.map((question, index) => (
-                <div key={index} className="mb-8">
-                  <div className="flex justify-between">
-                    <p className="font-bold text-xl mb-4">Q{index + 1}:-</p>
-                    <Link to={`/admin/quiz/question/${question.id}`}>View Question Analysis</Link>
-                  </div>
-                  <div className="mb-4 flex w-full justify-center">
-                    {question.image && (
-                      <img
-                        src={`http://127.0.0.1:8000${question.image}`}
-                        alt="Question Image"
-                        className="max-w-screen-xl w-full h-auto md:max-w-sm lg:max-w-md rounded-lg shadow-sm zoom"
-                      />
-                    )}
-                  </div>
-                  <p className="font-bold text-xl mb-4">
-                    {question.questionText}
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {question.options.map((option, oindex) => (
-                      <label
-                        key={oindex}
-                        htmlFor={`option-${option.id}`}
-                        className={`w-full border border-gray-300 p-4 rounded-lg flex items-center cursor-pointer ${
-                          option.selected && option.isCorrect
-                            ? "bg-green-200"
-                            : option.selected
-                            ? "bg-red-200"
-                            : option.isCorrect
-                            ? "bg-green-200"
-                            : "hover:bg-gray-100"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          id={`option-${option.id}`}
-                          name={`question-${question.id}`}
-                          value={option.id}
-                          className="mr-4"
-                          disabled
-                          checked={option.selected}
-                        />
-                        <div className="flex items-center w-max">
-                          {option.image && (
-                            <img
-                              src={`http://127.0.0.1:8000${option.image}`}
-                              alt="Option Image"
-                              className="w-20 h-auto mr-1 rounded-lg shadow-sm zoom"
-                            />
-                          )}
-                          <span className="text-lg">{option.text}</span>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
+              <h1 className="font-bold text-3xl mb-4 text-center text-blue-600">Quiz Submitted on {formatDate(key)}</h1>
+              <h1 className="font-bold text-2xl mb-4 text-center text-green-600">Score: <span className="text-green-600">{value.score}</span></h1>
+              {value.questions.map((question, index) => (
+              <div key={index} className="mb-8">
+                <div className="flex justify-between items-center mb-4">
+                <p className="font-bold text-xl">Q{index + 1}:</p>
+                <Link to={`/admin/quiz/question/${question.id}`} className="text-blue-500 hover:underline">View Question Analysis</Link>
                 </div>
+                <div className="mb-4 flex w-full justify-center">
+                {question.image && (
+                  <img
+                  src={`http://127.0.0.1:8000${question.image}`}
+                  alt="Question Image"
+                  className="max-w-screen-xl w-full h-auto md:max-w-sm lg:max-w-md rounded-lg shadow-sm zoom"
+                  />
+                )}
+                </div>
+                <p className="font-bold text-xl mb-4">
+                {question.questionText}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {question.options.map((option, oindex) => (
+                  <label
+                  key={oindex}
+                  htmlFor={`option-${option.id}`}
+                  className={`w-full border border-gray-300 p-4 rounded-lg flex items-center cursor-pointer ${
+                    option.selected && option.isCorrect
+                    ? "bg-green-200"
+                    : option.selected
+                    ? "bg-red-200"
+                    : option.isCorrect
+                    ? "bg-green-200"
+                    : "hover:bg-gray-100"
+                  }`}
+                  >
+                  <input
+                    type="radio"
+                    id={`option-${option.id}`}
+                    name={`question-${question.id}-${oindex}`}
+                    value={option.id}
+                    className="mr-4"
+                    disabled
+                    checked={option.selected}
+                  />
+                  <div className="flex items-center w-max">
+                    {option.image && (
+                    <img
+                      src={`http://127.0.0.1:8000${option.image}`}
+                      alt="Option Image"
+                      className="w-20 h-auto mr-1 rounded-lg shadow-sm zoom"
+                    />
+                    )}
+                    <span className="text-lg">{option.text}</span>
+                  </div>
+                  </label>
+                ))}
+                </div>
+              </div>
               ))}
               </div>
             );

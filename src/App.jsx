@@ -29,6 +29,8 @@ import CompNQuestionDetails from "./components/Admin/CompNQuestionDetails";
 import CreateCompNQuestion from "./components/Admin/CreateCompNQuestion";
 import CompNQuestionStudentResults from "./components/Admin/CompNQuestionStudentResults";
 import CreateUpdates from "./components/Admin/CreateUpdates";
+import DeleteAccount from "./components/Account/DeleteAccount";
+import VerifyDelete from "./components/Account/VerifyDelete";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -55,12 +57,8 @@ const App = () => {
   }, []);
 
   const E404 = () => {
-    return (
-      <h1>
-        This page does not exist.
-      </h1>
-    )
-  }
+    return <h1>This page does not exist.</h1>;
+  };
 
   return (
     <BrowserRouter>
@@ -75,10 +73,36 @@ const App = () => {
             element={<Verification />}
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/questions" element={<Questions />} />
-          <Route path="/question/:qid" element={<Layout code={code} setCode={setCode} setLastKeypress={setLastKeypress} setSaved={setSaved} children={<Question code={code} setCode={setCode} setLastKeypress={setLastKeypress} setSaved={setSaved} lastKeypress={lastKeypress} saved={saved} />} />} />
-          {/*<Route path="/question/:qid/solutions" element={<Layout children={<Solutions />} />} />*/}
-          <Route path="/question/:qid/submissions" element={<Layout children={<Submissions />} />} />
+          <Route path="/delete" element={<DeleteAccount />} />
+          <Route path="/delete/verification/:verification" element={<VerifyDelete />} />
+          <Route path="/question">
+            <Route index element={<Questions />} />
+            <Route
+              path=":qid"
+              element={
+                <Layout
+                  code={code}
+                  setCode={setCode}
+                  setLastKeypress={setLastKeypress}
+                  setSaved={setSaved}
+                  children={
+                    <Question
+                      code={code}
+                      setCode={setCode}
+                      setLastKeypress={setLastKeypress}
+                      setSaved={setSaved}
+                      lastKeypress={lastKeypress}
+                      saved={saved}
+                    />
+                  }
+                />
+              }
+            />
+            <Route
+              path=":qid/submissions"
+              element={<Layout setCode={setCode} code={code} children={<Submissions code={code}  />} />}
+            />
+          </Route>
           <Route path="/competition" element={<Competitions />} />
           <Route path="/competition/:compid" element={<Competition />} />
           <Route path="/admin">
@@ -99,7 +123,10 @@ const App = () => {
               <Route path="create" element={<CreateCompNQuestion />} />
               <Route path="details/:type/:id">
                 <Route index element={<CompNQuestionDetails />} />
-                <Route path=":email/" element={<CompNQuestionStudentResults />} />
+                <Route
+                  path=":email/"
+                  element={<CompNQuestionStudentResults />}
+                />
               </Route>
             </Route>
           </Route>

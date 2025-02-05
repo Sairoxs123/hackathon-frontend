@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import sendRequest from "../../utils/utils";
 
 const Competition = () => {
   const [codeStorage, setCodeStorage] = useState("");
@@ -55,7 +56,7 @@ const Competition = () => {
       formdata.append("email", cookies.email);
       formdata.append("code", code);
       formdata.append("barred", true);
-      axios.post("http://127.0.0.1:8000/competition/code/submit/", formdata);
+      sendRequest("post", "/competition/code/submit/", formdata);
     }
   }, [isFullscreen]);
 
@@ -83,7 +84,7 @@ const Competition = () => {
         formData.append("id", compid);
         formData.append("code", code);
         formData.append("email", cookies.email);
-        axios.post("http://127.0.0.1:8000/competition/code/save/", formData);
+        sendRequest("post", "/competition/code/save/", formData);
         setCodeStorage(code);
       }
       setSaved(true);
@@ -304,8 +305,7 @@ const Competition = () => {
         } else {
           formdata.append("correct", false);
         }
-        console.log(time / 3);
-        axios.post("http://127.0.0.1:8000/competition/code/submit/", formdata);
+        sendRequest("post", "/competition/code/submit/", formdata);
       }
     }
   }, [executed]);
@@ -364,7 +364,7 @@ const Competition = () => {
       formdata.append("email", cookies.email);
       formdata.append("code", code);
       formdata.append("barred", true);
-      axios.post("http://127.0.0.1:8000/competition/code/submit/", formdata);
+      sendRequest("post", "/competition/code/submit/", formdata);
     } else {
       //document.getElementById("count").innerHTML = count;
       console.log("came back");
@@ -400,14 +400,14 @@ const Competition = () => {
         )}
       </nav>
       <div style={{ display: "flex" }}>
-        <div style={{ width: "50%", height: "95vh" }}>
+        <div style={{ width: "50%", height: "95vh" }} className="bg-gray-900 text-white">
           <div>
             <p>{question}</p>
             {inputs.length > 0
               ? inputs.map((input, index) => {
                   return (
-                    <>
-                      <p key={index}>Example {index + 1}</p>
+                    <div key={index}>
+                      <p>Example {index + 1}</p>
                       <pre className="examples">
                         Input:
                         {typeof input === "string" ? (
@@ -448,13 +448,13 @@ const Competition = () => {
                           <span>{JSON.stringify(outputs[index])}</span>
                         )}
                       </pre>
-                    </>
+                    </div>
                   );
                 })
               : outputs.map((output, index) => {
                   return (
-                    <>
-                      <p key={index}>Example {index + 1}</p>
+                    <div key={index}>
+                      <p>Example {index + 1}</p>
                       Output:
                       <pre>
                         {typeof output == "string" ? (
@@ -473,7 +473,7 @@ const Competition = () => {
                           <span>{JSON.stringify(output)}</span>
                         )}
                       </pre>
-                    </>
+                    </div>
                   );
                 })}
             <button onClick={handle_execute}>Execute</button>
@@ -483,7 +483,7 @@ const Competition = () => {
             <h3>Test Results</h3>
             <div className="p-6">
               {inputs.length > 0 ? (
-                <>
+                <div>
                   <div className="flex space-x-4 mb-4">
                     {inputs.map((_, index) => (
                       <button
@@ -559,9 +559,9 @@ const Competition = () => {
                       />
                     </div>
                   )}
-                </>
+                </div>
               ) : (
-                <>
+                <div>
                   <div className="flex space-x-4 mb-4">
                     {outputs.map((_, index) => (
                       <button
@@ -603,7 +603,7 @@ const Competition = () => {
                       />
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
           </div>

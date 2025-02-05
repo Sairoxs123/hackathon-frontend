@@ -128,7 +128,7 @@ const Results = () => {
                         <input
                           type="radio"
                           id={`option-${option.id}`}
-                          name={`question-${question.id}`}
+                          name={`question-${question.id}-${oindex}`}
                           value={option.id}
                           className="mr-4"
                           disabled
@@ -191,7 +191,7 @@ const Results = () => {
                         <input
                           type="radio"
                           id={`option-${option.id}`}
-                          name={`question-${question.id}`}
+                          name={`question-${question.id}-${oindex}`}
                           value={option.id}
                           className="mr-4"
                           disabled

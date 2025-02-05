@@ -17,7 +17,7 @@ function Navbar() {
         </Link>
         <ul className="nav-links">
           <li>
-            <Link to="/questions" className="font-bold">Home</Link>
+            <Link to="/question" className="font-bold">Home</Link>
           </li>
           <li>
             <Link to="#" className="font-bold">About</Link>

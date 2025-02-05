@@ -271,7 +271,7 @@ const QuizDetails = () => {
     try {
       const data = new FormData()
       data.append("quiz_id", id)
-      axios.post(`http://127.0.0.1:8000/owner/quiz/delete/`, data)
+      sendRequest("post", `/owner/quiz/delete/`, data)
     } catch (error) {
       console.error("Error creating quiz:", error);
     }
@@ -344,7 +344,7 @@ const QuizDetails = () => {
     try {
       const data = new FormData()
       data.append("quiz_id", id)
-      axios.post(`http://127.0.0.1:8000/owner/quiz/delete/submissions/`, data)
+      sendRequest("post", `/owner/quiz/delete/submissions/`, data)
       .then((res) => {
         setResults([])
       })

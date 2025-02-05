@@ -33,7 +33,7 @@ const Layout = ({ children, code, setCode, setLastKeypress, setSaved }) => {
         <div className="flex items-center space-x-4">
           {/* Using Link tags for better UX with client-side routing  */}
           <Link to={`/question/${qid}/`} className="text-white hover:text-gray-300">Question</Link>
-          <Link to={`/question/${qid}/submissions`} className="text-white hover:text-gray-300 submissions">Submissions</Link>
+          <Link to={`/question/${qid}/submissions`} className="text-white hover:text-gray-300">Submissions</Link>
           {/*Example solutions link, uncomment if needed*/}
           {/* <Link to={`/question/${qid}/solutions`} className="text-white hover:text-gray-300">Solutions</Link> */}
         </div>

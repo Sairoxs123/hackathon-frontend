@@ -93,13 +93,13 @@ const Quiz = () => {
     }
 
     try {
-      sendRequest("post",
-          "/user/quiz/submit/", // Replace with your API endpoint
-          formData
-        )
-        .then((res) => {
-          window.location.href = `/quiz/${id}/results`
-        });
+      sendRequest(
+        "post",
+        "/user/quiz/submit/", // Replace with your API endpoint
+        formData
+      ).then((res) => {
+        window.location.href = `/quiz/${id}/results`;
+      });
       // Handle successful submission (e.g., show a success message)
     } catch (error) {
       console.error("Error submitting quiz answers:", error);
@@ -114,6 +114,14 @@ const Quiz = () => {
           onSubmit={handleSubmit}
           className="bg-white p-8 rounded-lg shadow-md w-full md:w-2/3 lg:w-1/2"
         >
+          <div class="prose lg:prose-xl text-center">
+            <a
+              href={`/quiz/${id}/results`}
+              class="inline-block px-4 py-2 mt-4 text-lg font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              See your results if you have taken this test before.
+            </a>
+          </div>
           <h2 className="text-3xl font-bold mb-8 text-center">Quiz</h2>
           {questions.map((question, index) => (
             <div key={index} className="mb-8">

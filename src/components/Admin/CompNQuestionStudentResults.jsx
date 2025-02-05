@@ -18,11 +18,6 @@ const CompNQuestionStudentResults = () => {
     });
   }, []);
 
-  const formatDateTime = (dateTime) => {
-    const date = new Date(dateTime);
-    return date.toLocaleString(); // More user-friendly date and time format
-  };
-
   return (
     <div className="mx-auto p-4 text-center">
       <h1 className="text-2xl font-bold mb-4">Student Results</h1>
@@ -54,7 +49,7 @@ const CompNQuestionStudentResults = () => {
               </p>
               <p>
                 <span className="font-semibold">Submit Time:</span>{" "}
-                {formatDateTime(item.submit_time)}
+                {item.submit_time}
               </p>
             </div>
             <div className="w-full md:w-1/2 mt-4 md:mt-0 m-1">

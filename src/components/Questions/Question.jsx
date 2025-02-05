@@ -16,7 +16,6 @@ const Question = ({
   saved,
 }) => {
   const [codeStorage, setCodeStorage] = useState("");
-
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [executed, setExecuted] = useState({});
@@ -118,6 +117,16 @@ const Question = ({
                   setTime(totalTime);
                   setMemory(totalMemory);
                   setExecution(true);
+                  toast.success("Code executed successfully.", {
+                    position: "top-right", // Position (top-right, top-center, etc.)
+                    autoClose: 5000, // Duration in milliseconds (5 seconds)
+                    hideProgressBar: false, // Show/hide the progress bar
+                    closeOnClick: true, // Close on click
+                    pauseOnHover: true, // Pause on hover
+                    draggable: true, // Make the toast draggable
+                    progress: undefined, // Custom progress bar animation (e.g., a function)
+                    theme: "light", // Set the theme ("light" or "dark")
+                  });
                 });
             }, 2500);
           })
@@ -174,6 +183,16 @@ const Question = ({
                 setTime(totalTime);
                 setMemory(totalMemory);
                 setExecution(true);
+                toast.success("Code executed successfully.", {
+                  position: "top-right", // Position (top-right, top-center, etc.)
+                  autoClose: 5000, // Duration in milliseconds (5 seconds)
+                  hideProgressBar: false, // Show/hide the progress bar
+                  closeOnClick: true, // Close on click
+                  pauseOnHover: true, // Pause on hover
+                  draggable: true, // Make the toast draggable
+                  progress: undefined, // Custom progress bar animation (e.g., a function)
+                  theme: "light", // Set the theme ("light" or "dark")
+                });
               });
           }, 2500);
         })
@@ -189,33 +208,6 @@ const Question = ({
         });
     }
   };
-
-  useEffect(() => {
-    if (execution == false) {
-      toast.error("An error has occurred. Please try again.", {
-        position: "top-right", // Position (top-right, top-center, etc.)
-        autoClose: 5000, // Duration in milliseconds (5 seconds)
-        hideProgressBar: false, // Show/hide the progress bar
-        closeOnClick: true, // Close on click
-        pauseOnHover: true, // Pause on hover
-        draggable: true, // Make the toast draggable
-        progress: undefined, // Custom progress bar animation (e.g., a function)
-        theme: "light", // Set the theme ("light" or "dark")
-      });
-      setExecution(null);
-    } else if (execution == true) {
-      toast.success("Code executed successfully.", {
-        position: "top-right", // Position (top-right, top-center, etc.)
-        autoClose: 5000, // Duration in milliseconds (5 seconds)
-        hideProgressBar: false, // Show/hide the progress bar
-        closeOnClick: true, // Close on click
-        pauseOnHover: true, // Pause on hover
-        draggable: true, // Make the toast draggable
-        progress: undefined, // Custom progress bar animation (e.g., a function)
-        theme: "light", // Set the theme ("light" or "dark")
-      });
-    }
-  }, [execution]);
 
   const submit = () => {
     handle_execute(true);
